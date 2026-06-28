@@ -5,7 +5,7 @@ import { adjustBuck } from "@/app/actions";
 
 export function BalanceAdjuster() {
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
       <PersonAdjuster
         title="Achini"
         buckType="akash"
@@ -51,14 +51,14 @@ function PersonAdjuster({
       <div className="flex gap-2 mt-3">
         <button
           onClick={() => handleAdjust(1)}
-          className="flex-1 border-2 border-black px-4 py-2 text-sm font-bold uppercase
+          className="flex-1 border-2 border-black px-2 py-2 text-sm font-bold uppercase
                      hover:bg-black hover:text-white transition-colors"
         >
           +1 Buck
         </button>
         <button
           onClick={() => handleAdjust(-1)}
-          className="flex-1 border-2 border-black px-4 py-2 text-sm font-bold uppercase
+          className="flex-1 border-2 border-black px-2 py-2 text-sm font-bold uppercase
                      hover:bg-black hover:text-white transition-colors"
         >
           -1 Buck
