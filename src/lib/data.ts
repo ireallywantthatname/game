@@ -1,7 +1,7 @@
 "use cache";
 
 import { cacheLife, cacheTag } from "next/cache";
-import { supabase } from "@/lib/supabase";
+import { getDb } from "@/lib/db";
 import type { GameState, Transaction, Reward } from "@/lib/types";
 
 export async function getGameState(): Promise<GameState | null> {
@@ -9,12 +9,13 @@ export async function getGameState(): Promise<GameState | null> {
   cacheLife("minutes");
   cacheTag("game-state");
 
-  const { data } = await supabase
-    .from("game_state")
-    .select("*")
-    .eq("id", 1)
-    .single();
-  return data;
+  const db = getDb();
+  const row = db
+    .query(
+      "SELECT akash_bucks, achini_bucks, updated_at FROM game_state WHERE id = 1"
+    )
+    .get() as GameState | undefined;
+  return row ?? null;
 }
 
 export async function getTransactions(
@@ -24,12 +25,12 @@ export async function getTransactions(
   cacheLife("minutes");
   cacheTag("transactions");
 
-  const { data } = await supabase
-    .from("transactions")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(limit);
-  return data ?? [];
+  const db = getDb();
+  return db
+    .query(
+      "SELECT id, buck_type, amount, reason, created_at FROM transactions ORDER BY created_at DESC LIMIT ?"
+    )
+    .all(limit) as Transaction[];
 }
 
 export async function getRewards(): Promise<Reward[]> {
@@ -37,9 +38,10 @@ export async function getRewards(): Promise<Reward[]> {
   cacheLife("minutes");
   cacheTag("rewards");
 
-  const { data } = await supabase
-    .from("rewards")
-    .select("*")
-    .order("created_at", { ascending: true });
-  return data ?? [];
+  const db = getDb();
+  return db
+    .query(
+      "SELECT id, name, description, cost, buck_type, status, created_at, updated_at, redeemed_at FROM rewards ORDER BY created_at ASC"
+    )
+    .all() as Reward[];
 }
