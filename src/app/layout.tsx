@@ -15,8 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "GAME — Bucks & rewards",
-  description: "Track bucks, log moments, redeem rewards.",
+  title: "GAME",
 };
 
 export default function RootLayout({

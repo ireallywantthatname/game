@@ -44,9 +44,6 @@ function RewardSection({
       {rewards.length === 0 ? (
         <div className="border-2 border-dashed border-gray-300 px-5 py-8 mb-4 text-center">
           <p className="text-sm text-muted">No rewards yet</p>
-          <p className="text-xs text-faint mt-1">
-            Add one below when you know what it&apos;s worth.
-          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

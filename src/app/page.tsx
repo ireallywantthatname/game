@@ -21,55 +21,35 @@ export default async function Page() {
       <Header />
 
       <section aria-labelledby="balances-heading" className="space-y-8">
-        <div className="flex items-end justify-between gap-4 border-b-2 border-black pb-3">
-          <h2
-            id="balances-heading"
-            className="text-2xl font-semibold tracking-tight text-balance"
-          >
-            Balances
-          </h2>
-          <p className="label-micro hidden sm:block pb-0.5">
-            Live scoreboard
-          </p>
-        </div>
+        <h2
+          id="balances-heading"
+          className="text-2xl font-semibold tracking-tight border-b-2 border-black pb-3"
+        >
+          Balances
+        </h2>
         <BalanceDisplay akashBucks={akashBucks} achiniBucks={achiniBucks} />
         <BalanceAdjuster />
       </section>
 
       <section aria-labelledby="activity-heading">
-        <div className="flex items-end justify-between gap-4 border-b-2 border-black pb-3 mb-6">
-          <h2
-            id="activity-heading"
-            className="text-2xl font-semibold tracking-tight text-balance"
-          >
-            Activity log
-          </h2>
-          <p className="label-micro hidden sm:block pb-0.5">
-            Latest {transactions.length || "—"}
-          </p>
-        </div>
+        <h2
+          id="activity-heading"
+          className="text-2xl font-semibold tracking-tight border-b-2 border-black pb-3 mb-6"
+        >
+          Activity log
+        </h2>
         <TransactionLog transactions={transactions} />
       </section>
 
       <section aria-labelledby="rewards-heading">
-        <div className="flex items-end justify-between gap-4 border-b-2 border-black pb-3 mb-6">
-          <h2
-            id="rewards-heading"
-            className="text-2xl font-semibold tracking-tight text-balance"
-          >
-            Rewards
-          </h2>
-          <p className="label-micro hidden sm:block pb-0.5">
-            Earn · redeem
-          </p>
-        </div>
+        <h2
+          id="rewards-heading"
+          className="text-2xl font-semibold tracking-tight border-b-2 border-black pb-3 mb-6"
+        >
+          Rewards
+        </h2>
         <RewardList rewards={rewards} />
       </section>
-
-      <footer className="border-t-2 border-black pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted">
-        <p className="font-mono tracking-wide">GAME · private ledger</p>
-        <p className="text-faint">Akash & Achini</p>
-      </footer>
     </main>
   );
 }
