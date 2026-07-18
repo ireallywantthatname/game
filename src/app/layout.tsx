@@ -11,12 +11,12 @@ const jetbrainsMono = JetBrains_Mono({
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "GAME",
-  description:
-    "Game tracker — earn bucks, redeem rewards",
+  title: "GAME — Bucks & rewards",
+  description: "Track bucks, log moments, redeem rewards.",
 };
 
 export default function RootLayout({
@@ -29,7 +29,10 @@ export default function RootLayout({
       lang="en"
       className={`${jetbrainsMono.variable} ${spaceGrotesk.variable}`}
     >
-      <body className="font-sans antialiased bg-white text-black min-h-screen">
+      <body className="font-sans antialiased min-h-dvh text-ink">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <NoiseBackground />
         {children}
       </body>

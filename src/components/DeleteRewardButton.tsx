@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { deleteReward } from "@/app/actions";
 
 export function DeleteRewardButton({ rewardId }: { rewardId: string }) {
   const [confirming, setConfirming] = useState(false);
+  const [pending, startTransition] = useTransition();
 
   if (!confirming) {
     return (
       <button
+        type="button"
         onClick={() => setConfirming(true)}
-        className="text-xs text-gray-400 hover:text-black transition-colors underline"
+        className="text-xs text-faint underline-offset-2 hover:text-ink hover:underline transition-colors"
       >
         Delete
       </button>
@@ -18,20 +20,26 @@ export function DeleteRewardButton({ rewardId }: { rewardId: string }) {
   }
 
   return (
-    <span className="text-xs">
+    <span className="text-xs font-mono">
       <button
-        onClick={async () => {
-          await deleteReward(rewardId);
-          setConfirming(false);
+        type="button"
+        disabled={pending}
+        onClick={() => {
+          startTransition(async () => {
+            await deleteReward(rewardId);
+            setConfirming(false);
+          });
         }}
-        className="text-red-600 font-bold hover:underline mr-1"
+        className="font-semibold text-accent hover:underline disabled:opacity-50"
       >
-        Yes
+        {pending ? "…" : "Yes"}
       </button>
-      /
+      <span className="text-faint mx-0.5">/</span>
       <button
+        type="button"
+        disabled={pending}
         onClick={() => setConfirming(false)}
-        className="text-gray-400 hover:text-black ml-1"
+        className="text-faint hover:text-ink transition-colors"
       >
         No
       </button>

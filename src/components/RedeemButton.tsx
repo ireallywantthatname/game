@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { redeemReward } from "@/app/actions";
 
 export function RedeemButton({
@@ -11,14 +11,11 @@ export function RedeemButton({
   canRedeem: boolean;
 }) {
   const [confirming, setConfirming] = useState(false);
+  const [pending, startTransition] = useTransition();
 
   if (!canRedeem) {
     return (
-      <button
-        disabled
-        className="border-2 border-gray-300 px-3 py-1 text-xs uppercase text-gray-300
-                   font-bold cursor-not-allowed"
-      >
+      <button type="button" disabled className="btn">
         Redeem
       </button>
     );
@@ -27,9 +24,9 @@ export function RedeemButton({
   if (!confirming) {
     return (
       <button
+        type="button"
         onClick={() => setConfirming(true)}
-        className="border-2 border-black px-3 py-1 text-xs uppercase font-bold
-                   hover:bg-black hover:text-white transition-colors"
+        className="btn"
       >
         Redeem
       </button>
@@ -39,21 +36,25 @@ export function RedeemButton({
   return (
     <div className="flex gap-1">
       <button
+        type="button"
         onClick={() => setConfirming(false)}
-        className="border-2 border-gray-500 px-3 py-1 text-xs uppercase text-gray-500
-                   font-bold hover:bg-gray-100 transition-colors"
+        disabled={pending}
+        className="btn btn-ghost"
       >
         Cancel
       </button>
       <button
-        onClick={async () => {
-          await redeemReward(rewardId);
-          setConfirming(false);
+        type="button"
+        disabled={pending}
+        onClick={() => {
+          startTransition(async () => {
+            await redeemReward(rewardId);
+            setConfirming(false);
+          });
         }}
-        className="border-2 border-black px-3 py-1 text-xs uppercase font-bold
-                   bg-black text-white hover:bg-gray-800 transition-colors"
+        className="btn btn-primary"
       >
-        Confirm
+        {pending ? "…" : "Confirm"}
       </button>
     </div>
   );

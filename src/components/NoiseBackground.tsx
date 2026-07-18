@@ -1,17 +1,18 @@
 export function NoiseBackground() {
   return (
     <div
-      className="fixed inset-0 pointer-events-none z-50 opacity-[0.03]"
+      className="fixed inset-0 pointer-events-none z-50 opacity-[0.045] mix-blend-multiply"
       aria-hidden
     >
-      <svg width="100%" height="100%">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <filter id="noise">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.65"
-            numOctaves="3"
+            baseFrequency="0.8"
+            numOctaves="4"
             stitchTiles="stitch"
           />
+          <feColorMatrix type="saturate" values="0" />
         </filter>
         <rect width="100%" height="100%" filter="url(#noise)" />
       </svg>

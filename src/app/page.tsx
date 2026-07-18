@@ -14,29 +14,62 @@ export default async function Page() {
   const achiniBucks = state?.achini_bucks ?? 0;
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-12 space-y-16">
+    <main
+      id="main"
+      className="relative max-w-5xl mx-auto px-5 sm:px-8 pt-10 pb-20 sm:pt-14 sm:pb-24 space-y-20"
+    >
       <Header />
 
-      <section>
-        <BalanceDisplay akashBucks={akashBucks} achiniBucks={achiniBucks} />
-        <div className="mt-8">
-          <BalanceAdjuster />
+      <section aria-labelledby="balances-heading" className="space-y-8">
+        <div className="flex items-end justify-between gap-4 border-b-2 border-black pb-3">
+          <h2
+            id="balances-heading"
+            className="text-2xl font-semibold tracking-tight text-balance"
+          >
+            Balances
+          </h2>
+          <p className="label-micro hidden sm:block pb-0.5">
+            Live scoreboard
+          </p>
         </div>
+        <BalanceDisplay akashBucks={akashBucks} achiniBucks={achiniBucks} />
+        <BalanceAdjuster />
       </section>
 
-      <section>
-        <h2 className="text-2xl font-bold uppercase tracking-widest border-b-2 border-black pb-2 mb-6">
-          Activity Log
-        </h2>
+      <section aria-labelledby="activity-heading">
+        <div className="flex items-end justify-between gap-4 border-b-2 border-black pb-3 mb-6">
+          <h2
+            id="activity-heading"
+            className="text-2xl font-semibold tracking-tight text-balance"
+          >
+            Activity log
+          </h2>
+          <p className="label-micro hidden sm:block pb-0.5">
+            Latest {transactions.length || "—"}
+          </p>
+        </div>
         <TransactionLog transactions={transactions} />
       </section>
 
-      <section>
-        <h2 className="text-2xl font-bold uppercase tracking-widest border-b-2 border-black pb-2 mb-6">
-          Rewards
-        </h2>
+      <section aria-labelledby="rewards-heading">
+        <div className="flex items-end justify-between gap-4 border-b-2 border-black pb-3 mb-6">
+          <h2
+            id="rewards-heading"
+            className="text-2xl font-semibold tracking-tight text-balance"
+          >
+            Rewards
+          </h2>
+          <p className="label-micro hidden sm:block pb-0.5">
+            Earn · redeem
+          </p>
+        </div>
         <RewardList rewards={rewards} />
       </section>
+
+      <footer className="border-t-2 border-black pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted">
+        <p className="font-mono tracking-wide">GAME · private ledger</p>
+        <p className="text-faint">Akash & Achini</p>
+      </footer>
     </main>
   );
 }

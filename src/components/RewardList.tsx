@@ -7,15 +7,15 @@ export function RewardList({ rewards }: { rewards: Reward[] }) {
   const achiniRewards = rewards.filter((r) => r.buck_type === "achini");
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-14">
       <RewardSection
-        title="Akash Buck Rewards"
+        title="Akash buck rewards"
         subtitle="Achini redeems — Akash does something for Achini"
         rewards={akashRewards}
         buckType="akash"
       />
       <RewardSection
-        title="Achini Buck Rewards"
+        title="Achini buck rewards"
         subtitle="Akash redeems — Achini does something for Akash"
         rewards={achiniRewards}
         buckType="achini"
@@ -37,16 +37,25 @@ function RewardSection({
 }) {
   return (
     <div>
-      <h4 className="text-sm font-bold uppercase tracking-widest">{title}</h4>
-      <p className="text-xs text-gray-500 mt-1 mb-4">{subtitle}</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {rewards.map((reward) => (
-          <RewardCard key={reward.id} reward={reward} />
-        ))}
+      <div className="mb-5">
+        <h3 className="text-base font-semibold tracking-tight">{title}</h3>
+        <p className="text-xs text-muted mt-1 leading-relaxed">{subtitle}</p>
       </div>
-      <div className="mt-4">
-        <RewardForm buckType={buckType} />
-      </div>
+      {rewards.length === 0 ? (
+        <div className="border-2 border-dashed border-gray-300 px-5 py-8 mb-4 text-center">
+          <p className="text-sm text-muted">No rewards yet</p>
+          <p className="text-xs text-faint mt-1">
+            Add one below when you know what it&apos;s worth.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          {rewards.map((reward) => (
+            <RewardCard key={reward.id} reward={reward} />
+          ))}
+        </div>
+      )}
+      <RewardForm buckType={buckType} />
     </div>
   );
 }

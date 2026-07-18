@@ -5,16 +5,18 @@ interface Props {
 
 export function BalanceDisplay({ akashBucks, achiniBucks }: Props) {
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
       <BalanceCard
-        label="Akash Bucks"
-        subtitle="Achini's Balance"
+        label="Akash bucks"
+        subtitle="Achini's balance"
         amount={akashBucks}
+        accent="left"
       />
       <BalanceCard
-        label="Achini Bucks"
-        subtitle="Akash's Balance"
+        label="Achini bucks"
+        subtitle="Akash's balance"
         amount={achiniBucks}
+        accent="right"
       />
     </div>
   );
@@ -24,18 +26,26 @@ function BalanceCard({
   label,
   subtitle,
   amount,
+  accent,
 }: {
   label: string;
   subtitle: string;
   amount: number;
+  accent: "left" | "right";
 }) {
   return (
-    <div className="border-2 border-black p-6">
-      <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
-        {subtitle}
+    <div className="panel relative overflow-hidden p-6 sm:p-7 transition-transform duration-200 hover:-translate-y-0.5">
+      <div
+        className={`absolute top-0 ${accent === "left" ? "left-0" : "right-0"} h-full w-1.5 bg-accent`}
+        aria-hidden
+      />
+      <p className="label-micro">{subtitle}</p>
+      <p className="font-mono text-6xl sm:text-7xl font-bold tracking-tight mt-3 tabular leading-none">
+        {amount}
       </p>
-      <p className="text-6xl font-mono font-bold mt-2">{amount}</p>
-      <p className="text-sm uppercase tracking-widest mt-1">{label}</p>
+      <p className="mt-3 text-sm font-medium tracking-wide text-gray-700">
+        {label}
+      </p>
     </div>
   );
 }

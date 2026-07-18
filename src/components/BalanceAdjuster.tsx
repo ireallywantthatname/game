@@ -1,20 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { adjustBuck } from "@/app/actions";
 
 export function BalanceAdjuster() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
       <PersonAdjuster
         title="Achini"
         buckType="akash"
-        description="When she does something he enjoys (+1) — or the reverse (-1)"
+        description="When she does something he enjoys (+1) — or the reverse (−1)"
       />
       <PersonAdjuster
         title="Akash"
         buckType="achini"
-        description="When he does something she enjoys (+1) — or the reverse (-1)"
+        description="When he does something she enjoys (+1) — or the reverse (−1)"
       />
     </div>
   );
@@ -30,38 +30,46 @@ function PersonAdjuster({
   description: string;
 }) {
   const [reason, setReason] = useState("");
+  const [pending, startTransition] = useTransition();
 
   const handleAdjust = (amount: number) => {
-    adjustBuck(buckType, amount, reason || "No reason given");
-    setReason("");
+    startTransition(async () => {
+      await adjustBuck(buckType, amount, reason || "No reason given");
+      setReason("");
+    });
   };
 
   return (
-    <div className="border-2 border-black p-4">
-      <p className="font-bold uppercase tracking-widest text-sm">{title}</p>
-      <p className="text-xs text-gray-500 mt-1">{description}</p>
+    <div className="panel-flat p-5 space-y-3">
+      <div>
+        <p className="text-sm font-semibold tracking-tight">{title}</p>
+        <p className="text-xs text-muted mt-1 leading-relaxed">{description}</p>
+      </div>
       <input
         type="text"
         value={reason}
         onChange={(e) => setReason(e.target.value)}
-        placeholder="Reason..."
-        className="w-full mt-3 border-2 border-black px-3 py-2 text-sm font-mono bg-white
-                   focus:outline-none focus:bg-gray-100"
+        placeholder="Reason…"
+        disabled={pending}
+        className="field"
+        aria-label={`Reason for ${title} adjustment`}
       />
-      <div className="flex gap-2 mt-3">
+      <div className="flex gap-2">
         <button
+          type="button"
           onClick={() => handleAdjust(1)}
-          className="flex-1 border-2 border-black px-2 py-2 text-sm font-bold uppercase
-                     hover:bg-black hover:text-white transition-colors"
+          disabled={pending}
+          className="btn flex-1"
         >
-          +1 Buck
+          {pending ? "…" : "+1 buck"}
         </button>
         <button
+          type="button"
           onClick={() => handleAdjust(-1)}
-          className="flex-1 border-2 border-black px-2 py-2 text-sm font-bold uppercase
-                     hover:bg-black hover:text-white transition-colors"
+          disabled={pending}
+          className="btn flex-1"
         >
-          -1 Buck
+          {pending ? "…" : "−1 buck"}
         </button>
       </div>
     </div>
