@@ -22,11 +22,11 @@
   --color-gray-800: #221f1b;
   --color-gray-900: #14120b;
 
-  /* Single accent — desaturated stamp brick */
-  --color-accent: #b54a32;
-  --color-accent-soft: #e8cfc6;
+  /* Neutral accent — ink only, no warm brick */
+  --color-accent: #14120b;
+  --color-accent-soft: #ddd6c8;
   --color-gain: #2f5d3a;
-  --color-loss: #8a4a3a;
+  --color-loss: #4a4540;
 
   --shadow-ink: 3px 3px 0 0 #14120b;
   --shadow-ink-sm: 2px 2px 0 0 #14120b;

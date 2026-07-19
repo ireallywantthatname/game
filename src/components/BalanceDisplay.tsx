@@ -10,13 +10,11 @@ export function BalanceDisplay({ akashBucks, achiniBucks }: Props) {
         label="Akash bucks"
         subtitle="Achini's balance"
         amount={akashBucks}
-        accent="left"
       />
       <BalanceCard
         label="Achini bucks"
         subtitle="Akash's balance"
         amount={achiniBucks}
-        accent="right"
       />
     </div>
   );
@@ -26,19 +24,13 @@ function BalanceCard({
   label,
   subtitle,
   amount,
-  accent,
 }: {
   label: string;
   subtitle: string;
   amount: number;
-  accent: "left" | "right";
 }) {
   return (
-    <div className="panel relative overflow-hidden p-6 sm:p-7 transition-transform duration-200 hover:-translate-y-0.5">
-      <div
-        className={`absolute top-0 ${accent === "left" ? "left-0" : "right-0"} h-full w-1.5 bg-accent`}
-        aria-hidden
-      />
+    <div className="panel p-6 sm:p-7 transition-transform duration-200 hover:-translate-y-0.5">
       <p className="label-micro">{subtitle}</p>
       <p className="font-mono text-6xl sm:text-7xl font-bold tracking-tight mt-3 tabular leading-none">
         {amount}

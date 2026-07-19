@@ -30,7 +30,7 @@ export function DeleteRewardButton({ rewardId }: { rewardId: string }) {
             setConfirming(false);
           });
         }}
-        className="font-semibold text-accent hover:underline disabled:opacity-50"
+        className="font-semibold text-ink hover:underline disabled:opacity-50"
       >
         {pending ? "…" : "Yes"}
       </button>

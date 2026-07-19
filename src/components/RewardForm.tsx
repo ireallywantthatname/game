@@ -66,7 +66,7 @@ export function RewardForm({
         aria-describedby={error ? "reward-name-error" : undefined}
       />
       {error ? (
-        <p id="reward-name-error" className="text-xs text-accent font-medium" role="alert">
+        <p id="reward-name-error" className="text-xs text-ink font-medium" role="alert">
           {error}
         </p>
       ) : null}
