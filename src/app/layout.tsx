@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { NoiseBackground } from "@/components/NoiseBackground";
+import { ThemeScript } from "@/components/theme-script";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -26,8 +27,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${jetbrainsMono.variable} ${spaceGrotesk.variable}`}
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="font-sans antialiased min-h-dvh text-ink">
         <a href="#main" className="skip-link">
           Skip to content

@@ -23,7 +23,7 @@ export default async function Page() {
       <section aria-labelledby="balances-heading" className="space-y-8">
         <h2
           id="balances-heading"
-          className="text-2xl font-semibold tracking-tight border-b-2 border-black pb-3"
+          className="text-2xl font-semibold tracking-tight border-b-2 border-ink pb-3"
         >
           Balances
         </h2>
@@ -34,7 +34,7 @@ export default async function Page() {
       <section aria-labelledby="activity-heading">
         <h2
           id="activity-heading"
-          className="text-2xl font-semibold tracking-tight border-b-2 border-black pb-3 mb-6"
+          className="text-2xl font-semibold tracking-tight border-b-2 border-ink pb-3 mb-6"
         >
           Activity log
         </h2>
@@ -44,7 +44,7 @@ export default async function Page() {
       <section aria-labelledby="rewards-heading">
         <h2
           id="rewards-heading"
-          className="text-2xl font-semibold tracking-tight border-b-2 border-black pb-3 mb-6"
+          className="text-2xl font-semibold tracking-tight border-b-2 border-ink pb-3 mb-6"
         >
           Rewards
         </h2>

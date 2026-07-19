@@ -20,7 +20,7 @@ export function RewardForm({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="w-full border-2 border-dashed border-gray-300 px-4 py-3 text-xs font-medium uppercase tracking-[0.12em] text-faint transition-colors hover:border-black hover:text-ink hover:bg-paper/40"
+        className="w-full border-2 border-dashed border-gray-300 px-4 py-3 text-xs font-medium uppercase tracking-[0.12em] text-faint transition-colors hover:border-ink hover:text-ink hover:bg-paper/40"
       >
         + Add reward
       </button>

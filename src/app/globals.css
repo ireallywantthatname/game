@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "Fira Code", monospace;
 
-  /* Warm paper ledger palette */
+  /* Warm paper ledger palette — light defaults */
   --color-black: #14120b;
   --color-white: #f7f4ef;
   --color-paper: #efebe3;
@@ -28,8 +30,50 @@
   --color-gain: #2f5d3a;
   --color-loss: #4a4540;
 
+  --color-field-hover: #fffdf9;
+  --color-glow-top: #fff9f0;
+  --color-glow-bottom: #e8dfd2;
+
   --shadow-ink: 3px 3px 0 0 #14120b;
   --shadow-ink-sm: 2px 2px 0 0 #14120b;
+}
+
+/*
+  Night desk ledger — same brutalist stamps and offset shadows,
+  inverted to lamp-lit umber rather than cold void + neon.
+  html.dark beats :root theme specificity so tokens actually flip.
+*/
+html.dark {
+  color-scheme: dark;
+
+  --color-black: #e8e2d6;
+  --color-white: #16140f;
+  --color-paper: #1e1b16;
+  --color-ink: #e8e2d6;
+  --color-muted: #9a9388;
+  --color-faint: #6e675e;
+
+  --color-gray-100: #252119;
+  --color-gray-200: #2f2a22;
+  --color-gray-300: #4a4338;
+  --color-gray-400: #6e675e;
+  --color-gray-500: #9a9388;
+  --color-gray-600: #b5aea2;
+  --color-gray-700: #cfc7b8;
+  --color-gray-800: #ddd6c8;
+  --color-gray-900: #e8e2d6;
+
+  --color-accent: #e8e2d6;
+  --color-accent-soft: #3d362c;
+  --color-gain: #7cb88a;
+  --color-loss: #a89f92;
+
+  --color-field-hover: #242018;
+  --color-glow-top: #2a2218;
+  --color-glow-bottom: #12100c;
+
+  --shadow-ink: 3px 3px 0 0 #e8e2d6;
+  --shadow-ink-sm: 2px 2px 0 0 #e8e2d6;
 }
 
 * {
@@ -38,6 +82,11 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -46,9 +95,20 @@ body {
   background-color: var(--color-white);
   color: var(--color-ink);
   background-image:
-    radial-gradient(ellipse 120% 80% at 50% -20%, #fff9f0 0%, transparent 55%),
-    radial-gradient(ellipse 60% 40% at 100% 100%, #e8dfd2 0%, transparent 50%);
+    radial-gradient(
+      ellipse 120% 80% at 50% -20%,
+      var(--color-glow-top) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 100% 100%,
+      var(--color-glow-bottom) 0%,
+      transparent 50%
+    );
   background-attachment: fixed;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
 }
 
 /* Visible keyboard focus — accessibility */
@@ -137,25 +197,25 @@ body {
 }
 
 .field:hover {
-  background: #fffdf9;
+  background: var(--color-field-hover);
 }
 
 .field:focus {
   outline: none;
-  background: #fffdf9;
+  background: var(--color-field-hover);
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .panel {
   border: 2px solid var(--color-ink);
-  background: color-mix(in srgb, var(--color-white) 92%, white);
+  background: var(--color-paper);
   box-shadow: var(--shadow-ink);
 }
 
 .panel-flat {
   border: 2px solid var(--color-ink);
-  background: color-mix(in srgb, var(--color-white) 92%, white);
+  background: var(--color-paper);
 }
 
 .label-micro {
@@ -201,4 +261,63 @@ body {
 /* Tabular figures for balance numbers */
 .tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Film grain — multiply on paper, soft-light on night desk */
+.noise-layer {
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+}
+
+.dark .noise-layer {
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
+}
+
+/* Theme stamp toggle */
+.theme-stamp {
+  display: inline-flex;
+  border: 2px solid var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.theme-stamp__opt {
+  padding: 0.45rem 0.65rem;
+  color: var(--color-faint);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.theme-stamp__opt[aria-pressed="true"] {
+  background: var(--color-ink);
+  color: var(--color-white);
+}
+
+.theme-stamp__opt:hover:not([aria-pressed="true"]) {
+  color: var(--color-ink);
+  background: var(--color-gray-100);
+}
+
+.theme-stamp__opt:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .btn,
+  .field,
+  .theme-stamp__opt {
+    transition: none;
+  }
 }

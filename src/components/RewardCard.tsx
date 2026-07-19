@@ -15,7 +15,7 @@ export async function RewardCard({ reward }: { reward: Reward }) {
   return (
     <article
       className={`panel-flat p-5 flex flex-col min-h-[9.5rem] transition-opacity ${
-        redeemed ? "opacity-45" : "hover:bg-[#fffdf9]"
+        redeemed ? "opacity-45" : "hover:bg-field-hover"
       }`}
     >
       <div className="flex justify-between items-start gap-4 flex-1">
@@ -38,7 +38,7 @@ export async function RewardCard({ reward }: { reward: Reward }) {
           </p>
         </div>
         {redeemed ? (
-          <span className="shrink-0 text-[0.65rem] font-semibold uppercase tracking-[0.12em] border-2 border-black px-2 py-1 bg-paper">
+          <span className="shrink-0 text-[0.65rem] font-semibold uppercase tracking-[0.12em] border-2 border-ink px-2 py-1 bg-white">
             Redeemed
           </span>
         ) : (
