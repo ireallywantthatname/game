@@ -39,23 +39,25 @@
 }
 
 /*
-  Night desk ledger — same brutalist stamps and offset shadows,
-  inverted to lamp-lit umber rather than cold void + neon.
+  AMOLED ledger — true #000 surfaces so OLED pixels stay off.
+  Structure comes from cream ink borders and offset shadows only
+  (no warm umber fills, no lamp glow that lights the glass).
   html.dark beats :root theme specificity so tokens actually flip.
 */
 html.dark {
   color-scheme: dark;
 
   --color-black: #e8e2d6;
-  --color-white: #16140f;
-  --color-paper: #1e1b16;
+  --color-white: #000000;
+  --color-paper: #000000;
   --color-ink: #e8e2d6;
   --color-muted: #9a9388;
   --color-faint: #6e675e;
 
-  --color-gray-100: #252119;
-  --color-gray-200: #2f2a22;
-  --color-gray-300: #4a4338;
+  /* Fills only where interaction needs a beat of depth */
+  --color-gray-100: #0a0a0a;
+  --color-gray-200: #141414;
+  --color-gray-300: #2e2e2e;
   --color-gray-400: #6e675e;
   --color-gray-500: #9a9388;
   --color-gray-600: #b5aea2;
@@ -64,13 +66,14 @@ html.dark {
   --color-gray-900: #e8e2d6;
 
   --color-accent: #e8e2d6;
-  --color-accent-soft: #3d362c;
+  --color-accent-soft: #3a3630;
   --color-gain: #7cb88a;
   --color-loss: #a89f92;
 
-  --color-field-hover: #242018;
-  --color-glow-top: #2a2218;
-  --color-glow-bottom: #12100c;
+  --color-field-hover: #0a0a0a;
+  /* Kill ambient glow — every lit pixel costs battery */
+  --color-glow-top: #000000;
+  --color-glow-bottom: #000000;
 
   --shadow-ink: 3px 3px 0 0 #e8e2d6;
   --shadow-ink-sm: 2px 2px 0 0 #e8e2d6;
@@ -109,6 +112,11 @@ body {
   transition:
     background-color 220ms ease,
     color 220ms ease;
+}
+
+/* Pure black canvas — no gradient stack on OLED */
+html.dark body {
+  background-image: none;
 }
 
 /* Visible keyboard focus — accessibility */
@@ -269,8 +277,9 @@ body {
   mix-blend-mode: multiply;
 }
 
+/* Sparse grain — enough texture, not a lit wash over pure black */
 .dark .noise-layer {
-  opacity: 0.1;
+  opacity: 0.04;
   mix-blend-mode: soft-light;
 }
 
