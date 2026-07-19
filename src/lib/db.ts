@@ -1,19 +1,20 @@
-import { Database } from "bun:sqlite";
-import path from "node:path";
-import fs from "node:fs";
+import { createClient, type Client } from "@libsql/client";
 
-let db: Database | null = null;
+let client: Client | null = null;
+let initPromise: Promise<Client> | null = null;
 
-export function getDb(): Database {
-  if (db) return db;
+async function initDb(): Promise<Client> {
+  const url = process.env.LIBSQL_URL;
+  if (!url) {
+    throw new Error("LIBSQL_URL is not set");
+  }
 
-  const dbDir = path.join(process.cwd(), "data");
-  fs.mkdirSync(dbDir, { recursive: true });
+  const db = createClient({
+    url,
+    authToken: process.env.LIBSQL_AUTH_TOKEN,
+  });
 
-  db = new Database(path.join(dbDir, "game.db"));
-  db.exec("PRAGMA journal_mode = WAL");
-
-  db.exec(`
+  await db.executeMultiple(`
     CREATE TABLE IF NOT EXISTS game_state (
       id INTEGER PRIMARY KEY,
       akash_bucks INTEGER NOT NULL DEFAULT 0,
@@ -42,15 +43,33 @@ export function getDb(): Database {
     );
   `);
 
-  const row = db
-    .query("SELECT COUNT(*) AS cnt FROM game_state")
-    .get() as { cnt: number };
+  const countResult = await db.execute(
+    "SELECT COUNT(*) AS cnt FROM game_state"
+  );
+  const cnt = Number(countResult.rows[0]?.cnt ?? 0);
 
-  if (row.cnt === 0) {
-    db.query(
-      "INSERT INTO game_state (id, akash_bucks, achini_bucks, updated_at) VALUES (1, 0, 0, ?)"
-    ).run(new Date().toISOString());
+  if (cnt === 0) {
+    await db.execute({
+      sql: "INSERT INTO game_state (id, akash_bucks, achini_bucks, updated_at) VALUES (1, 0, 0, ?)",
+      args: [new Date().toISOString()],
+    });
   }
 
   return db;
+}
+
+export async function getDb(): Promise<Client> {
+  if (client) return client;
+  if (!initPromise) {
+    initPromise = initDb()
+      .then((db) => {
+        client = db;
+        return db;
+      })
+      .catch((err) => {
+        initPromise = null;
+        throw err;
+      });
+  }
+  return initPromise;
 }
