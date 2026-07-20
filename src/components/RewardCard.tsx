@@ -14,7 +14,7 @@ export async function RewardCard({ reward }: { reward: Reward }) {
 
   return (
     <article
-      className={`panel-flat p-5 flex flex-col min-h-[9.5rem] transition-opacity ${
+      className={`panel-flat p-5 flex flex-col min-h-[9.5rem] ${
         redeemed ? "opacity-45" : "hover:bg-field-hover"
       }`}
     >

@@ -12,7 +12,7 @@ export function DeleteRewardButton({ rewardId }: { rewardId: string }) {
       <button
         type="button"
         onClick={() => setConfirming(true)}
-        className="text-xs text-faint underline-offset-2 hover:text-ink hover:underline transition-colors"
+        className="text-xs text-faint underline-offset-2 hover:text-ink hover:underline"
       >
         Delete
       </button>
@@ -39,7 +39,7 @@ export function DeleteRewardButton({ rewardId }: { rewardId: string }) {
         type="button"
         disabled={pending}
         onClick={() => setConfirming(false)}
-        className="text-faint hover:text-ink transition-colors"
+        className="text-faint hover:text-ink"
       >
         No
       </button>

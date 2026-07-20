@@ -25,7 +25,7 @@ export function TransactionItem({
     transaction.buck_type === "akash" ? "Akash buck" : "Achini buck";
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 py-3.5 font-mono text-sm group hover:bg-paper/60 transition-colors">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 py-3.5 font-mono text-sm group hover:bg-paper/60">
       <div className="min-w-0 space-y-0.5">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
           <span className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-muted">

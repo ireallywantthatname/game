@@ -52,7 +52,7 @@ export function PasswordGate() {
     const t = window.setTimeout(() => {
       setShake(false);
       inputRefs.current[0]?.focus();
-    }, 420);
+    }, 240);
     return () => window.clearTimeout(t);
   }, [state.error, state.attempt]);
 

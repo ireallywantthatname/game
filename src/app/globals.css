@@ -84,7 +84,6 @@ html.dark {
 }
 
 html {
-  scroll-behavior: smooth;
   color-scheme: light;
 }
 
@@ -110,8 +109,8 @@ body {
     );
   background-attachment: fixed;
   transition:
-    background-color 220ms ease,
-    color 220ms ease;
+    background-color 120ms ease,
+    color 120ms ease;
 }
 
 /* Pure black canvas — no gradient stack on OLED */
@@ -139,10 +138,9 @@ html.dark body {
   background: var(--color-white);
   color: var(--color-ink);
   transition:
-    background-color 200ms ease,
-    color 200ms ease,
-    transform 160ms ease,
-    box-shadow 200ms ease;
+    background-color 100ms ease,
+    color 100ms ease,
+    box-shadow 100ms ease;
   cursor: pointer;
 }
 
@@ -150,11 +148,9 @@ html.dark body {
   background: var(--color-ink);
   color: var(--color-white);
   box-shadow: var(--shadow-ink-sm);
-  transform: translate(-1px, -1px);
 }
 
 .btn:active:not(:disabled) {
-  transform: translate(1px, 1px) scale(0.98);
   box-shadow: none;
 }
 
@@ -186,7 +182,6 @@ html.dark body {
   color: var(--color-ink);
   border-color: var(--color-ink);
   box-shadow: none;
-  transform: none;
 }
 
 .field {
@@ -197,7 +192,9 @@ html.dark body {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   color: var(--color-ink);
-  transition: background-color 180ms ease, border-color 180ms ease;
+  transition:
+    background-color 100ms ease,
+    border-color 100ms ease;
 }
 
 .field::placeholder {
@@ -302,8 +299,8 @@ html.dark body {
   border: none;
   cursor: pointer;
   transition:
-    background-color 160ms ease,
-    color 160ms ease;
+    background-color 100ms ease,
+    color 100ms ease;
 }
 
 .theme-stamp__opt[aria-pressed="true"] {
@@ -368,9 +365,9 @@ html.dark .access-overlay {
   color: var(--color-ink);
   caret-color: var(--color-ink);
   transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease;
+    background-color 100ms ease,
+    border-color 100ms ease,
+    box-shadow 100ms ease;
 }
 
 .access-digit:hover:not(:disabled) {
@@ -402,98 +399,33 @@ html.dark .access-overlay {
   color: var(--color-ink);
 }
 
-@keyframes access-shake {
+/* Wrong code — brief opacity flash, no bounce */
+@keyframes access-flash {
   0%,
   100% {
-    transform: translateX(0);
+    opacity: 1;
   }
-  18% {
-    transform: translateX(-5px);
-  }
-  36% {
-    transform: translateX(5px);
-  }
-  54% {
-    transform: translateX(-3px);
-  }
-  72% {
-    transform: translateX(3px);
+  40% {
+    opacity: 0.35;
   }
 }
 
 .access-digits--shake {
-  animation: access-shake 0.4s ease;
+  animation: access-flash 0.22s ease;
 }
 
-/* Unlocked content — ink-in text reveal */
-@keyframes ledger-ink {
+/* Unlocked content — single short fade, no stagger/blur/slide */
+@keyframes ledger-fade {
   from {
     opacity: 0;
-    transform: translateY(0.55em);
-    filter: blur(3px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
   }
 }
 
-@keyframes ledger-type {
-  from {
-    clip-path: inset(0 100% 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-.ledger-reveal > main > *:nth-child(1) {
-  animation: ledger-ink 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: 0.04s;
-}
-
-.ledger-reveal > main > *:nth-child(2) {
-  animation: ledger-ink 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: 0.14s;
-}
-
-.ledger-reveal > main > *:nth-child(3) {
-  animation: ledger-ink 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: 0.28s;
-}
-
-.ledger-reveal > main > *:nth-child(4) {
-  animation: ledger-ink 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: 0.42s;
-}
-
-/* Headings type on left-to-right like a ledger line */
-.ledger-reveal > main h1,
-.ledger-reveal > main h2 {
-  animation: ledger-type 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) both;
-}
-
-.ledger-reveal > main h1 {
-  animation-delay: 0.08s;
-}
-
-.ledger-reveal > main > *:nth-child(2) h2 {
-  animation-delay: 0.2s;
-}
-
-.ledger-reveal > main > *:nth-child(3) h2 {
-  animation-delay: 0.34s;
-}
-
-.ledger-reveal > main > *:nth-child(4) h2 {
-  animation-delay: 0.48s;
-}
-
-/* Mono figures write in a beat after their section opens */
-.ledger-reveal .tabular {
-  animation: ledger-ink 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: 0.36s;
+.ledger-reveal > main {
+  animation: ledger-fade 0.2s ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -506,10 +438,7 @@ html.dark .access-overlay {
   }
 
   .access-digits--shake,
-  .ledger-reveal > main > *,
-  .ledger-reveal > main h1,
-  .ledger-reveal > main h2,
-  .ledger-reveal .tabular {
+  .ledger-reveal > main {
     animation: none;
   }
 }

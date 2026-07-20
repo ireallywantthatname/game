@@ -30,7 +30,7 @@ function BalanceCard({
   amount: number;
 }) {
   return (
-    <div className="panel p-6 sm:p-7 transition-transform duration-200 hover:-translate-y-0.5">
+    <div className="panel p-6 sm:p-7">
       <p className="label-micro">{subtitle}</p>
       <p className="font-mono text-6xl sm:text-7xl font-bold tracking-tight mt-3 tabular leading-none">
         {amount}
