@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { refresh } from "next/cache";
 import { ACCESS_COOKIE, ACCESS_COOKIE_VALUE } from "@/lib/auth";
 
 /** Household PIN — never imported by client modules. */
@@ -38,10 +38,12 @@ export async function unlockApp(
     httpOnly: true,
     sameSite: "lax",
     path: "/",
-    // 30 days — re-enter occasionally, not every visit
     maxAge: 60 * 60 * 24 * 30,
     secure: process.env.NODE_ENV === "production",
   });
 
-  redirect("/");
+  // Re-render the page so data loads only after unlock
+  refresh();
+
+  return { error: null, attempt: prev.attempt };
 }

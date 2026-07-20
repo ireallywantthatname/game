@@ -16,6 +16,10 @@ import { unlockApp, type UnlockState } from "@/app/auth-actions";
 const DIGITS = 6;
 const initialState: UnlockState = { error: null, attempt: 0 };
 
+/**
+ * Minimal access overlay — floats over the empty ledger shell.
+ * Six digit cells only; auto-submits when complete.
+ */
 export function PasswordGate() {
   const formId = useId();
   const [digits, setDigits] = useState<string[]>(() =>
@@ -31,12 +35,15 @@ export function PasswordGate() {
   const code = digits.join("");
   const complete = code.length === DIGITS && digits.every((d) => d !== "");
 
-  // Focus first cell on mount
   useEffect(() => {
     inputRefs.current[0]?.focus();
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, []);
 
-  // Wrong code: shake, clear, refocus (attempt bumps every failure)
   useEffect(() => {
     if (!state.error || state.attempt === 0) return;
     submittingRef.current = false;
@@ -108,7 +115,6 @@ export function PasswordGate() {
     inputRefs.current[focusAt]?.focus();
   }, []);
 
-  // Auto-submit once six digits are in
   useEffect(() => {
     if (!complete || pending || submittingRef.current) return;
     submittingRef.current = true;
@@ -116,89 +122,73 @@ export function PasswordGate() {
   }, [complete, pending]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    if (!complete) {
-      e.preventDefault();
-    }
+    if (!complete) e.preventDefault();
   };
 
   return (
-    <main
-      id="main"
-      className="relative min-h-dvh flex flex-col items-center justify-center px-5 py-16"
+    <div
+      className="access-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`${formId}-label`}
     >
-      <div className="access-stamp w-full max-w-md">
-        <header className="access-stamp__head">
-          <p className="label-micro">Private ledger</p>
-          <h1 className="font-mono text-5xl sm:text-6xl font-bold uppercase tracking-[0.2em] leading-none mt-3">
-            GAME
-          </h1>
-          <div className="access-stamp__rule" aria-hidden />
-        </header>
+      <form
+        ref={formRef}
+        id={formId}
+        action={formAction}
+        onSubmit={onSubmit}
+        className="access-panel"
+        aria-describedby={state.error ? `${formId}-error` : undefined}
+      >
+        <input type="hidden" name="password" value={code} />
 
-        <form
-          ref={formRef}
-          id={formId}
-          action={formAction}
-          onSubmit={onSubmit}
-          className="access-stamp__body"
-          aria-describedby={state.error ? `${formId}-error` : undefined}
-        >
-          <input type="hidden" name="password" value={code} />
+        <p id={`${formId}-label`} className="label-micro mb-3">
+          Code
+        </p>
 
-          <fieldset className="border-0 p-0 m-0" disabled={pending}>
-            <legend className="label-micro mb-4">Access code</legend>
+        <fieldset className="border-0 p-0 m-0 min-w-0" disabled={pending}>
+          <legend className="sr-only">Six-digit access code</legend>
 
-            <div
-              className={`access-digits ${shake ? "access-digits--shake" : ""}`}
-              role="group"
-              aria-label="Six-digit access code"
-            >
-              {digits.map((digit, i) => (
-                <input
-                  key={i}
-                  ref={(el) => {
-                    inputRefs.current[i] = el;
-                  }}
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete={i === 0 ? "one-time-code" : "off"}
-                  name={`digit-${i}`}
-                  maxLength={1}
-                  value={digit}
-                  aria-label={`Digit ${i + 1} of ${DIGITS}`}
-                  className="access-digit"
-                  onChange={(e) => setDigitAt(i, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(i, e)}
-                  onPaste={handlePaste}
-                  onFocus={(e) => e.target.select()}
-                />
-              ))}
-            </div>
-          </fieldset>
-
-          {state.error ? (
-            <p
-              id={`${formId}-error`}
-              role="alert"
-              className="access-error mt-5"
-            >
-              {state.error}
-            </p>
-          ) : (
-            <p className="mt-5 text-sm text-muted">
-              Six digits. Opens the ledger.
-            </p>
-          )}
-
-          <button
-            type="submit"
-            className="btn btn-primary mt-8 w-full sm:w-auto min-w-[10rem]"
-            disabled={!complete || pending}
+          <div
+            className={`access-digits ${shake ? "access-digits--shake" : ""}`}
+            role="group"
+            aria-label="Six-digit access code"
           >
-            {pending ? "Opening…" : "Open ledger"}
-          </button>
-        </form>
-      </div>
-    </main>
+            {digits.map((digit, i) => (
+              <input
+                key={i}
+                ref={(el) => {
+                  inputRefs.current[i] = el;
+                }}
+                type="text"
+                inputMode="numeric"
+                autoComplete={i === 0 ? "one-time-code" : "off"}
+                name={`digit-${i}`}
+                maxLength={1}
+                value={digit}
+                aria-label={`Digit ${i + 1} of ${DIGITS}`}
+                className="access-digit"
+                onChange={(e) => setDigitAt(i, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(i, e)}
+                onPaste={handlePaste}
+                onFocus={(e) => e.target.select()}
+              />
+            ))}
+          </div>
+        </fieldset>
+
+        <p
+          id={`${formId}-error`}
+          role={state.error ? "alert" : undefined}
+          className={`access-status ${state.error ? "access-status--error" : ""}`}
+        >
+          {pending
+            ? "Opening…"
+            : state.error
+              ? state.error
+              : "\u00a0"}
+        </p>
+      </form>
+    </div>
   );
 }

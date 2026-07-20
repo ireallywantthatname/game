@@ -322,57 +322,47 @@ html.dark body {
   z-index: 1;
 }
 
-/* Access gate — ledger stamp */
-.access-stamp {
+/* Access gate — minimal overlay on empty shell */
+.access-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: color-mix(in srgb, var(--color-white) 78%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+html.dark .access-overlay {
+  background: color-mix(in srgb, #000 82%, transparent);
+}
+
+.access-panel {
+  width: min(100%, 20.5rem);
   border: 2px solid var(--color-ink);
   background: var(--color-paper);
   box-shadow: var(--shadow-ink);
-  padding: 2rem 1.75rem 2.25rem;
-}
-
-@media (min-width: 640px) {
-  .access-stamp {
-    padding: 2.5rem 2.5rem 2.75rem;
-  }
-}
-
-.access-stamp__head {
-  margin-bottom: 2rem;
-}
-
-.access-stamp__rule {
-  margin-top: 1.25rem;
-  height: 2px;
-  background: var(--color-ink);
-}
-
-.access-stamp__body {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  padding: 1.25rem 1.25rem 1rem;
 }
 
 .access-digits {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.5rem;
+  gap: 0.4rem;
   width: 100%;
-}
-
-@media (min-width: 640px) {
-  .access-digits {
-    gap: 0.65rem;
-  }
 }
 
 .access-digit {
   aspect-ratio: 3 / 4;
   width: 100%;
-  min-height: 3.25rem;
+  min-height: 2.75rem;
   border: 2px solid var(--color-ink);
   background: var(--color-white);
   font-family: var(--font-mono);
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   text-align: center;
   color: var(--color-ink);
@@ -381,13 +371,6 @@ html.dark body {
     background-color 160ms ease,
     border-color 160ms ease,
     box-shadow 160ms ease;
-}
-
-@media (min-width: 640px) {
-  .access-digit {
-    font-size: 1.75rem;
-    min-height: 3.75rem;
-  }
 }
 
 .access-digit:hover:not(:disabled) {
@@ -406,12 +389,17 @@ html.dark body {
   cursor: not-allowed;
 }
 
-.access-error {
-  font-size: 0.875rem;
+.access-status {
+  margin-top: 0.75rem;
+  min-height: 1.25rem;
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+}
+
+.access-status--error {
   color: var(--color-ink);
-  border-left: 3px solid var(--color-ink);
-  padding-left: 0.75rem;
 }
 
 @keyframes access-shake {
@@ -420,21 +408,92 @@ html.dark body {
     transform: translateX(0);
   }
   18% {
-    transform: translateX(-6px);
+    transform: translateX(-5px);
   }
   36% {
-    transform: translateX(6px);
+    transform: translateX(5px);
   }
   54% {
-    transform: translateX(-4px);
+    transform: translateX(-3px);
   }
   72% {
-    transform: translateX(4px);
+    transform: translateX(3px);
   }
 }
 
 .access-digits--shake {
   animation: access-shake 0.4s ease;
+}
+
+/* Unlocked content — ink-in text reveal */
+@keyframes ledger-ink {
+  from {
+    opacity: 0;
+    transform: translateY(0.55em);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes ledger-type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.ledger-reveal > main > *:nth-child(1) {
+  animation: ledger-ink 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: 0.04s;
+}
+
+.ledger-reveal > main > *:nth-child(2) {
+  animation: ledger-ink 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: 0.14s;
+}
+
+.ledger-reveal > main > *:nth-child(3) {
+  animation: ledger-ink 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: 0.28s;
+}
+
+.ledger-reveal > main > *:nth-child(4) {
+  animation: ledger-ink 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: 0.42s;
+}
+
+/* Headings type on left-to-right like a ledger line */
+.ledger-reveal > main h1,
+.ledger-reveal > main h2 {
+  animation: ledger-type 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+
+.ledger-reveal > main h1 {
+  animation-delay: 0.08s;
+}
+
+.ledger-reveal > main > *:nth-child(2) h2 {
+  animation-delay: 0.2s;
+}
+
+.ledger-reveal > main > *:nth-child(3) h2 {
+  animation-delay: 0.34s;
+}
+
+.ledger-reveal > main > *:nth-child(4) h2 {
+  animation-delay: 0.48s;
+}
+
+/* Mono figures write in a beat after their section opens */
+.ledger-reveal .tabular {
+  animation: ledger-ink 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: 0.36s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -446,7 +505,11 @@ html.dark body {
     transition: none;
   }
 
-  .access-digits--shake {
+  .access-digits--shake,
+  .ledger-reveal > main > *,
+  .ledger-reveal > main h1,
+  .ledger-reveal > main h2,
+  .ledger-reveal .tabular {
     animation: none;
   }
 }
