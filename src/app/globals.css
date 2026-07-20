@@ -322,11 +322,131 @@ html.dark body {
   z-index: 1;
 }
 
+/* Access gate — ledger stamp */
+.access-stamp {
+  border: 2px solid var(--color-ink);
+  background: var(--color-paper);
+  box-shadow: var(--shadow-ink);
+  padding: 2rem 1.75rem 2.25rem;
+}
+
+@media (min-width: 640px) {
+  .access-stamp {
+    padding: 2.5rem 2.5rem 2.75rem;
+  }
+}
+
+.access-stamp__head {
+  margin-bottom: 2rem;
+}
+
+.access-stamp__rule {
+  margin-top: 1.25rem;
+  height: 2px;
+  background: var(--color-ink);
+}
+
+.access-stamp__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.access-digits {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .access-digits {
+    gap: 0.65rem;
+  }
+}
+
+.access-digit {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  min-height: 3.25rem;
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-ink);
+  caret-color: var(--color-ink);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+@media (min-width: 640px) {
+  .access-digit {
+    font-size: 1.75rem;
+    min-height: 3.75rem;
+  }
+}
+
+.access-digit:hover:not(:disabled) {
+  background: var(--color-field-hover);
+}
+
+.access-digit:focus {
+  outline: none;
+  background: var(--color-field-hover);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.access-digit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.access-error {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  border-left: 3px solid var(--color-ink);
+  padding-left: 0.75rem;
+}
+
+@keyframes access-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-6px);
+  }
+  36% {
+    transform: translateX(6px);
+  }
+  54% {
+    transform: translateX(-4px);
+  }
+  72% {
+    transform: translateX(4px);
+  }
+}
+
+.access-digits--shake {
+  animation: access-shake 0.4s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   body,
   .btn,
   .field,
-  .theme-stamp__opt {
+  .theme-stamp__opt,
+  .access-digit {
     transition: none;
+  }
+
+  .access-digits--shake {
+    animation: none;
   }
 }
