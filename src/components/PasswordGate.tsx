@@ -140,7 +140,7 @@ export function PasswordGate() {
         className="access-panel"
         aria-describedby={state.error ? `${formId}-error` : undefined}
       >
-        <input type="hidden" name="password" value={code} />
+        <input type="hidden" name="passcode" value={code} />
 
         <p id={`${formId}-label`} className="label-micro mb-3">
           Code
