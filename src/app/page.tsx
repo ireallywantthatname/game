@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { isUnlocked } from "@/lib/auth";
 import { getGameState, getTransactions, getRewards } from "@/lib/data";
 import { Header } from "@/components/Header";
@@ -10,19 +9,7 @@ import { PasswordGate } from "@/components/PasswordGate";
 import { LockedShell } from "@/components/LockedShell";
 import { LedgerReveal } from "@/components/LedgerReveal";
 
-export default function Page() {
-  return (
-    <Suspense fallback={<LockedShell />}>
-      <Gate />
-    </Suspense>
-  );
-}
-
-/**
- * Cookie check is request-time (uncached). Must live under Suspense
- * when Cache Components is enabled.
- */
-async function Gate() {
+export default async function Page() {
   const unlocked = await isUnlocked();
 
   // Locked: empty shell only — no DB reads. Overlay sits on top.
