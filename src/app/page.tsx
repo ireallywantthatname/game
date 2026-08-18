@@ -40,8 +40,8 @@ async function Gate() {
   const transactions = await getTransactions(15);
   const rewards = await getRewards();
 
-  const akashBucks = state?.akash_bucks ?? 0;
-  const achiniBucks = state?.achini_bucks ?? 0;
+  const akashBucks = state.akash_bucks;
+  const achiniBucks = state.achini_bucks;
 
   return (
     <LedgerReveal>
@@ -79,7 +79,11 @@ async function Gate() {
           >
             Rewards
           </h2>
-          <RewardList rewards={rewards} />
+          <RewardList
+            rewards={rewards}
+            akashBucks={akashBucks}
+            achiniBucks={achiniBucks}
+          />
         </section>
       </main>
     </LedgerReveal>

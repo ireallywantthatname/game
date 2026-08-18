@@ -1,14 +1,14 @@
 import type { Reward } from "@/lib/types";
-import { getGameState } from "@/lib/data";
 import { RedeemButton } from "./RedeemButton";
 import { DeleteRewardButton } from "./DeleteRewardButton";
 
-export async function RewardCard({ reward }: { reward: Reward }) {
-  const state = await getGameState();
-  const balance =
-    reward.buck_type === "akash"
-      ? (state?.akash_bucks ?? 0)
-      : (state?.achini_bucks ?? 0);
+export function RewardCard({
+  reward,
+  balance,
+}: {
+  reward: Reward;
+  balance: number;
+}) {
   const canRedeem = reward.status === "available" && balance >= reward.cost;
   const redeemed = reward.status === "redeemed";
 

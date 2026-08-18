@@ -2,7 +2,15 @@ import type { Reward } from "@/lib/types";
 import { RewardCard } from "./RewardCard";
 import { RewardForm } from "./RewardForm";
 
-export function RewardList({ rewards }: { rewards: Reward[] }) {
+export function RewardList({
+  rewards,
+  akashBucks,
+  achiniBucks,
+}: {
+  rewards: Reward[];
+  akashBucks: number;
+  achiniBucks: number;
+}) {
   const akashRewards = rewards.filter((r) => r.buck_type === "akash");
   const achiniRewards = rewards.filter((r) => r.buck_type === "achini");
 
@@ -13,12 +21,14 @@ export function RewardList({ rewards }: { rewards: Reward[] }) {
         subtitle="Achini redeems — Akash does something for Achini"
         rewards={akashRewards}
         buckType="akash"
+        balance={akashBucks}
       />
       <RewardSection
         title="Achini buck rewards"
         subtitle="Akash redeems — Achini does something for Akash"
         rewards={achiniRewards}
         buckType="achini"
+        balance={achiniBucks}
       />
     </div>
   );
@@ -29,11 +39,13 @@ function RewardSection({
   subtitle,
   rewards,
   buckType,
+  balance,
 }: {
   title: string;
   subtitle: string;
   rewards: Reward[];
   buckType: "akash" | "achini";
+  balance: number;
 }) {
   return (
     <div>
@@ -48,7 +60,7 @@ function RewardSection({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           {rewards.map((reward) => (
-            <RewardCard key={reward.id} reward={reward} />
+            <RewardCard key={reward.id} reward={reward} balance={balance} />
           ))}
         </div>
       )}

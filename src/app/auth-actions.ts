@@ -2,21 +2,14 @@
 
 import { cookies } from "next/headers";
 import { refresh } from "next/cache";
+import { fetchQuery } from "convex/nextjs";
+import { api } from "../../convex/_generated/api";
 import { ACCESS_COOKIE, ACCESS_COOKIE_VALUE } from "@/lib/auth";
 
 export type UnlockState = {
   error: string | null;
-  /** Bumps on each failed attempt so the UI can re-shake. */
   attempt: number;
 };
-
-function getPasscode(): string {
-  const passcode = process.env.PASSCODE;
-  if (!passcode) {
-    throw new Error("PASSCODE is not set");
-  }
-  return passcode;
-}
 
 export async function unlockApp(
   prev: UnlockState,
@@ -31,7 +24,8 @@ export async function unlockApp(
     };
   }
 
-  if (passcode !== getPasscode()) {
+  const ok = await fetchQuery(api.auth.verifyPasscode, { passcode });
+  if (!ok) {
     return {
       error: "Code not recognized. Try again.",
       attempt: prev.attempt + 1,
@@ -47,7 +41,6 @@ export async function unlockApp(
     secure: process.env.NODE_ENV === "production",
   });
 
-  // Re-render the page so data loads only after unlock
   refresh();
 
   return { error: null, attempt: prev.attempt };
