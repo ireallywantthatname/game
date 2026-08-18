@@ -8,13 +8,23 @@
  * @module
  */
 
+import type * as auth from "../auth.js";
+import type * as game from "../game.js";
+import type * as helpers from "../helpers.js";
+import type * as rewards from "../rewards.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
 
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  auth: typeof auth;
+  game: typeof game;
+  helpers: typeof helpers;
+  rewards: typeof rewards;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.
